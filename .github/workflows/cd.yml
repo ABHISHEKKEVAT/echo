@@ -1,18 +1,59 @@
 name: CD
 
 on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
   workflow_dispatch:
+    inputs:
+      ref:
+        description: Commit SHA or ref to publish (manual only)
+        required: false
+        type: string
+      publish_latest:
+        description: Also tag image as latest (manual only)
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   contents: read
   packages: write
 
+concurrency:
+  group: cd-${{ github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   publish:
+    name: Publish Backend Image
+    if: >
+      (github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main') ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-
     steps:
+      - name: Resolve target ref
+        id: target
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            echo "ref=${{ github.event.workflow_run.head_sha }}" >> "$GITHUB_OUTPUT"
+            echo "publish_latest=true" >> "$GITHUB_OUTPUT"
+          else
+            ref="${{ inputs.ref }}"
+            if [[ -z "$ref" ]]; then
+              ref="${{ github.sha }}"
+            fi
+            echo "ref=$ref" >> "$GITHUB_OUTPUT"
+            echo "publish_latest=${{ inputs.publish_latest }}" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.target.outputs.ref }}
 
       - uses: docker/setup-buildx-action@v4
 
@@ -28,7 +69,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}
           flavor: |
-            latest=true
+            latest=${{ steps.target.outputs.publish_latest }}
           tags: |
             type=sha,prefix=sha-,format=short
 

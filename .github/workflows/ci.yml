@@ -49,11 +49,12 @@ jobs:
               - 'mobile/**'
               - '.github/actions/mobile-ci/**'
               - '.github/workflows/ci.yml'
+              - '.github/workflows/flutter-ci.yml'
 
   backend-ci:
     name: Backend
     needs: changes
-    if: needs.changes.outputs.backend == 'true'
+    if: needs.changes.outputs.backend == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
@@ -64,7 +65,7 @@ jobs:
   admin-ci:
     name: Admin UI
     needs: changes
-    if: needs.changes.outputs.admin == 'true'
+    if: needs.changes.outputs.admin == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -74,7 +75,7 @@ jobs:
   mobile-ci:
     name: Mobile
     needs: changes
-    if: needs.changes.outputs.mobile == 'true'
+    if: needs.changes.outputs.mobile == 'true' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -111,38 +112,3 @@ jobs:
           admin/src
           mobile/lib
           shared
-
-  publish-backend-image:
-    name: Publish Backend Image
-    needs: [changes, backend-ci, duplicate-code-check]
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true' && needs.backend-ci.result == 'success'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v6
-      - uses: docker/setup-buildx-action@v4
-      - uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Docker metadata
-        id: meta
-        uses: docker/metadata-action@v6
-        with:
-          images: ghcr.io/${{ github.repository }}
-          flavor: |
-            latest=true
-          tags: |
-            type=sha,prefix=sha-,format=short
-      - uses: docker/build-push-action@v7
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
