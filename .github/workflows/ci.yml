@@ -1,0 +1,148 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  changes:
+    name: Detect changed apps
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+      contents: read
+    outputs:
+      backend: ${{ steps.changes.outputs.backend }}
+      admin: ${{ steps.changes.outputs.admin }}
+      mobile: ${{ steps.changes.outputs.mobile }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+              - 'docker/**'
+              - 'compose*.yml'
+              - 'Makefile'
+              - '.github/actions/backend-ci/**'
+              - '.github/workflows/ci.yml'
+              - '.github/workflows/cd.yml'
+            admin:
+              - 'admin/**'
+              - '.github/actions/admin-ci/**'
+              - '.github/workflows/ci.yml'
+            mobile:
+              - 'mobile/**'
+              - '.github/actions/mobile-ci/**'
+              - '.github/workflows/ci.yml'
+
+  backend-ci:
+    name: Backend
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run backend CI action
+        uses: ./.github/actions/backend-ci
+
+  admin-ci:
+    name: Admin UI
+    needs: changes
+    if: needs.changes.outputs.admin == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run admin CI action
+        uses: ./.github/actions/admin-ci
+
+  mobile-ci:
+    name: Mobile
+    needs: changes
+    if: needs.changes.outputs.mobile == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Run mobile CI action
+        uses: ./.github/actions/mobile-ci
+        # TODO: Fix this awkwardness, separate mobile CI actions
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: mobile/build/web/
+      - uses: actions/upload-artifact@v4
+        if: ${{ hashFiles('mobile/build/app/outputs/flutter-apk/app-debug.apk') != '' }}
+        with:
+          name: android-debug-apk
+          path: mobile/build/app/outputs/flutter-apk/app-debug.apk
+
+  duplicate-code-check:
+    name: Duplicate Code Guard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+      - name: Check duplicate code in source paths
+        run: >
+          npx -y jscpd@4.0.5
+          --min-lines 12
+          --min-tokens 80
+          --threshold 3
+          --reporters console
+          backend/src
+          backend/tests
+          admin/src
+          mobile/lib
+          shared
+
+  publish-backend-image:
+    name: Publish Backend Image
+    needs: [changes, backend-ci, duplicate-code-check]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && needs.changes.outputs.backend == 'true' && needs.backend-ci.result == 'success'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: docker/setup-buildx-action@v4
+      - uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=true
+          tags: |
+            type=sha,prefix=sha-,format=short
+      - uses: docker/build-push-action@v7
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

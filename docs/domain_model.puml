@@ -1,0 +1,168 @@
+@startuml
+
+enum Privacy {
+    Public,
+    Friends,
+    OnlyMe
+}
+
+enum UserStatus {
+    pending
+    active
+    disabled
+    suspended
+}
+
+entity AdminUser {
+}
+note right: Independent of app users
+
+entity User {
+    UUID id
+    string email
+    string username
+    string password_hash
+    string? google_subject
+    string? soundcloud_subject
+    string? spotify_subject
+    string? apple_subject
+    datetime? email_verified_at
+    bytes? email_verification_code_hash
+    datetime? email_verification_expires_at
+    datetime? email_verification_sent_at
+    bool mfa_enabled
+    string? mfa_totp_secret
+    string? avatar_path
+    string bio
+    Genre[] preferredGenres
+    UserStatus status
+    bool is_artist
+    datetime created_at
+    datetime updated_at
+}
+
+note left
+    Signup input: email (unique), username (unique), password
+    Stored credential: password_hash (bcrypt), never plain password
+    bio: limit 200 chars
+    DB charset/collation note: use database defaults (PostgreSQL UTF-8)
+    Sensitive data: email, password_hash, mfa_totp_secret,
+    email_verification_code_hash, auth tokens/security metadata
+    Public profile fields: username, bio, preferredGenres, avatar_path
+end note
+
+' Private attachments must be supported (expiring links / pre-signed links)
+entity Attachment {
+}
+
+entity Post {
+    UUID id
+    UUID user_id
+    Privacy privacy
+    datetime created_at
+    datetime updated_at
+    Attachment[] attachments
+}
+
+entity PostLike {
+    UUID id
+    UUID post_id
+    UUID user_id
+    datetime created_at
+    datetime updated_at
+}
+
+entity PostComment {
+    UUID id
+    UUID post_id
+    UUID user_id
+    string content
+    datetime created_at
+    datetime updated_at
+}
+
+enum PostActivityType {
+    like
+    comment
+}
+
+entity PostActivityNotification {
+    UUID id
+    UUID recipient_user_id
+    UUID actor_user_id
+    UUID post_id
+    PostActivityType activity_type
+    string? comment_preview
+    datetime? read_at
+    datetime created_at
+    datetime updated_at
+}
+
+' Initially 2 participants only
+entity MessageThread {
+    User[] participants
+}
+
+' Can only write to and receive messages from friends
+entity Message {
+    UUID id
+    UUID thread_id
+    UUID sender_id
+    datetime created_at
+    Attachment[] attachments
+}
+
+' Declined is not really required for now, but can be useful for audit purposes
+enum FriendStatus {
+    accepted
+    declined
+    pending
+}
+
+entity Friend {
+    UUID id
+    User user1
+    User user2
+    UUID? requested_by_id
+    FriendStatus status
+    datetime created_at
+    datetime updated_at
+}
+
+
+User <|-- Artist
+
+User ..> UserStatus : has
+User ||--o{ Post : creates
+Post ..> Privacy : has
+Post ||--o{ PostLike : has likes
+Post ||--o{ PostComment : has comments
+Post ||--o{ PostActivityNotification : has activity
+User ||--o{ PostLike : gives
+User ||--o{ PostComment : writes
+User ||--o{ PostActivityNotification : receives
+User ||--o{ PostActivityNotification : acts in
+
+User }o--o{ MessageThread : participates in
+
+MessageThread ||--|{ Message : contains
+User ||--o{ Message : sends
+
+User ||--o{ Friend : has
+
+Friend ..> FriendStatus : has
+PostActivityNotification ..> PostActivityType : has
+
+Post ||--o{ Attachment : has
+
+Attachment <|-- Text
+
+Attachment <|-- ArtistPost
+
+' Embedding of external players need to be checked
+Attachment <|-- SpotifyLink
+Attachment <|-- SoundcloudLink
+Attachment <|-- AudioFile
+Attachment <|-- VideoFile
+
+@enduml
