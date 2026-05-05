@@ -124,7 +124,7 @@ void main() {
       );
       await tester.pumpWidget(_buildTestApp(MusicSearchScreen(viewModel: vm)));
       await tester.enterText(find.byType(TextField), 'daft punk');
-      await tester.tap(find.byIcon(Icons.search));
+      await tester.tap(find.byIcon(Icons.arrow_forward_rounded));
       await tester.pumpAndSettle();
       expect(submitted, 'daft punk');
     });

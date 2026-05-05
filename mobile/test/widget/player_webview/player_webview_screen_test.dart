@@ -255,10 +255,12 @@ void main() {
       await tester.pumpWidget(_wrap(screen));
       await tester.pumpAndSettle();
 
-      final prevButton = tester.widget<IconButton>(
-        find.byWidgetPredicate(
-          (w) => w is IconButton && w.tooltip == 'Previous track',
-        ),
+      final prevButtonFinder = find.ancestor(
+        of: find.byIcon(Icons.skip_previous_rounded),
+        matching: find.byType(FilledButton),
+      );
+      final prevButton = tester.widget<FilledButton>(
+        prevButtonFinder,
       );
       expect(prevButton.onPressed, isNull);
     });
@@ -274,10 +276,12 @@ void main() {
       await tester.pumpWidget(_wrap(screen));
       await tester.pumpAndSettle();
 
-      final nextButton = tester.widget<IconButton>(
-        find.byWidgetPredicate(
-          (w) => w is IconButton && w.tooltip == 'Next track',
-        ),
+      final nextButtonFinder = find.ancestor(
+        of: find.byIcon(Icons.skip_next_rounded),
+        matching: find.byType(FilledButton),
+      );
+      final nextButton = tester.widget<FilledButton>(
+        nextButtonFinder,
       );
       expect(nextButton.onPressed, isNull);
     });
