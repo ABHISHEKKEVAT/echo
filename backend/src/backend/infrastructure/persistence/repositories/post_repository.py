@@ -91,15 +91,9 @@ class SqlAlchemyPostRepository(IPostRepository):
         if not post_ids:
             return {}, {}
 
-        likes_stmt = (
-            select(PostLike.post_id, func.count(PostLike.id))
-            .where(PostLike.post_id.in_(post_ids))
-            .group_by(PostLike.post_id)
-        )
+        likes_stmt = select(PostLike.post_id, func.count(PostLike.id)).where(PostLike.post_id.in_(post_ids)).group_by(PostLike.post_id)
         comments_stmt = (
-            select(PostComment.post_id, func.count(PostComment.id))
-            .where(PostComment.post_id.in_(post_ids))
-            .group_by(PostComment.post_id)
+            select(PostComment.post_id, func.count(PostComment.id)).where(PostComment.post_id.in_(post_ids)).group_by(PostComment.post_id)
         )
         likes_rows = (await self._session.execute(likes_stmt)).all()
         comments_rows = (await self._session.execute(comments_stmt)).all()
@@ -115,16 +109,12 @@ class SqlAlchemyPostRepository(IPostRepository):
     ) -> set[uuid.UUID]:
         if not post_ids:
             return set()
-        stmt = select(PostLike.post_id).where(
-            and_(PostLike.user_id == user_id, PostLike.post_id.in_(post_ids))
-        )
+        stmt = select(PostLike.post_id).where(and_(PostLike.user_id == user_id, PostLike.post_id.in_(post_ids)))
         rows = (await self._session.execute(stmt)).scalars().all()
         return set(rows)
 
     async def has_like(self, post_id: uuid.UUID, user_id: uuid.UUID) -> bool:
-        stmt = select(PostLike.id).where(
-            and_(PostLike.post_id == post_id, PostLike.user_id == user_id)
-        )
+        stmt = select(PostLike.id).where(and_(PostLike.post_id == post_id, PostLike.user_id == user_id))
         return (await self._session.execute(stmt)).scalar_one_or_none() is not None
 
     async def add_like(self, post_id: uuid.UUID, user_id: uuid.UUID) -> bool:
@@ -135,11 +125,7 @@ class SqlAlchemyPostRepository(IPostRepository):
         return True
 
     async def remove_like(self, post_id: uuid.UUID, user_id: uuid.UUID) -> bool:
-        result = await self._session.execute(
-            delete(PostLike).where(
-                and_(PostLike.post_id == post_id, PostLike.user_id == user_id)
-            )
-        )
+        result = await self._session.execute(delete(PostLike).where(and_(PostLike.post_id == post_id, PostLike.user_id == user_id)))
         await self._session.flush()
         return bool(result.rowcount)
 

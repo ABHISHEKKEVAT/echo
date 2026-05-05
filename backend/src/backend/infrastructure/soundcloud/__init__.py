@@ -1,2 +1,1 @@
 """SoundCloud authentication helpers."""
-

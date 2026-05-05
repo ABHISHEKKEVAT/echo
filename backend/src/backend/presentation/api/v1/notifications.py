@@ -37,9 +37,7 @@ async def list_post_activity_notifications(
             actor_username=actor_username,
             post_id=notification.post_id,
             activity_type=str(
-                notification.activity_type.value
-                if hasattr(notification.activity_type, "value")
-                else notification.activity_type
+                notification.activity_type.value if hasattr(notification.activity_type, "value") else notification.activity_type
             ),
             comment_preview=notification.comment_preview,
             created_at=notification.created_at,

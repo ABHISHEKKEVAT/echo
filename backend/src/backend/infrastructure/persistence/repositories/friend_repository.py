@@ -124,9 +124,7 @@ class SqlAlchemyFriendRepository(IFriendRepository):
         if user_id == target_user_id:
             return True
         user1_id, user2_id = self._ordered_pair(user_id, target_user_id)
-        stmt = select(Friend.status).where(
-            and_(Friend.user1_id == user1_id, Friend.user2_id == user2_id)
-        )
+        stmt = select(Friend.status).where(and_(Friend.user1_id == user1_id, Friend.user2_id == user2_id))
         status = (await self._session.execute(stmt)).scalar_one_or_none()
         return status == FriendStatus.accepted
 
@@ -208,17 +206,9 @@ class SqlAlchemyFriendRepository(IFriendRepository):
 
         friend_ids: list[uuid.UUID] = []
         for relationship in relationships:
-            friend_ids.append(
-                relationship.user2_id
-                if relationship.user1_id == user_id
-                else relationship.user1_id
-            )
+            friend_ids.append(relationship.user2_id if relationship.user1_id == user_id else relationship.user1_id)
 
-        users = (
-            await self._session.execute(
-                select(User.id, User.username, User.avatar_path).where(User.id.in_(friend_ids))
-            )
-        ).all()
+        users = (await self._session.execute(select(User.id, User.username, User.avatar_path).where(User.id.in_(friend_ids)))).all()
         users_by_id = {user_id_value: (username, avatar_path) for user_id_value, username, avatar_path in users}
 
         results: list[tuple[uuid.UUID, str, str | None]] = []
@@ -248,18 +238,10 @@ class SqlAlchemyFriendRepository(IFriendRepository):
         follower_ids: list[uuid.UUID] = []
         for relationship in relationships:
             if relationship.requested_by_id is None:
-                follower_ids.append(
-                    relationship.user2_id
-                    if relationship.user1_id == user_id
-                    else relationship.user1_id
-                )
+                follower_ids.append(relationship.user2_id if relationship.user1_id == user_id else relationship.user1_id)
                 continue
 
-            target_id = (
-                relationship.user2_id
-                if relationship.requested_by_id == relationship.user1_id
-                else relationship.user1_id
-            )
+            target_id = relationship.user2_id if relationship.requested_by_id == relationship.user1_id else relationship.user1_id
             if target_id == user_id and relationship.requested_by_id is not None:
                 follower_ids.append(relationship.requested_by_id)
 
@@ -286,19 +268,11 @@ class SqlAlchemyFriendRepository(IFriendRepository):
         following_ids: list[uuid.UUID] = []
         for relationship in relationships:
             if relationship.requested_by_id is None:
-                following_ids.append(
-                    relationship.user2_id
-                    if relationship.user1_id == user_id
-                    else relationship.user1_id
-                )
+                following_ids.append(relationship.user2_id if relationship.user1_id == user_id else relationship.user1_id)
                 continue
 
             if relationship.requested_by_id == user_id:
-                following_ids.append(
-                    relationship.user2_id
-                    if relationship.user1_id == user_id
-                    else relationship.user1_id
-                )
+                following_ids.append(relationship.user2_id if relationship.user1_id == user_id else relationship.user1_id)
 
         return await self._list_users_with_avatar(following_ids)
 
@@ -308,11 +282,7 @@ class SqlAlchemyFriendRepository(IFriendRepository):
     ) -> list[tuple[uuid.UUID, str, str | None]]:
         if not user_ids:
             return []
-        users = (
-            await self._session.execute(
-                select(User.id, User.username, User.avatar_path).where(User.id.in_(user_ids))
-            )
-        ).all()
+        users = (await self._session.execute(select(User.id, User.username, User.avatar_path).where(User.id.in_(user_ids)))).all()
         users_by_id = {user_id_value: (username, avatar_path) for user_id_value, username, avatar_path in users}
 
         results: list[tuple[uuid.UUID, str, str | None]] = []

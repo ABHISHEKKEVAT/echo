@@ -137,11 +137,7 @@ async def _load_thread_messages(
             )
         )
     ).all()
-    text_by_message_id: dict[uuid.UUID, str] = {
-        message_id: content or ""
-        for message_id, content in attachments
-        if message_id is not None
-    }
+    text_by_message_id: dict[uuid.UUID, str] = {message_id: content or "" for message_id, content in attachments if message_id is not None}
 
     return [
         DirectMessageItemResponse(
@@ -162,12 +158,16 @@ async def list_message_threads(
     db: AsyncSession = Depends(get_db_session),
 ):
     thread_ids = (
-        await db.execute(
-            select(MessageThreadParticipant.thread_id).where(
-                MessageThreadParticipant.user_id == current_user.id,
+        (
+            await db.execute(
+                select(MessageThreadParticipant.thread_id).where(
+                    MessageThreadParticipant.user_id == current_user.id,
+                )
             )
         )
-    ).scalars().all()
+        .scalars()
+        .all()
+    )
     if not thread_ids:
         return []
 
@@ -185,14 +185,10 @@ async def list_message_threads(
     if not other_participants:
         return []
 
-    other_user_by_thread: dict[uuid.UUID, uuid.UUID] = {
-        thread_id: user_id for thread_id, user_id in other_participants
-    }
+    other_user_by_thread: dict[uuid.UUID, uuid.UUID] = {thread_id: user_id for thread_id, user_id in other_participants}
     other_user_ids = list({user_id for _, user_id in other_participants})
 
-    user_rows = (
-        await db.execute(select(User.id, User.username).where(User.id.in_(other_user_ids)))
-    ).all()
+    user_rows = (await db.execute(select(User.id, User.username).where(User.id.in_(other_user_ids)))).all()
     username_by_user_id = {user_id: username for user_id, username in user_rows}
 
     friend_repo = SqlAlchemyFriendRepository(db)
@@ -211,12 +207,7 @@ async def list_message_threads(
             continue
 
         latest_message = (
-            await db.execute(
-                select(Message)
-                .where(Message.thread_id == thread_id)
-                .order_by(desc(Message.created_at))
-                .limit(1)
-            )
+            await db.execute(select(Message).where(Message.thread_id == thread_id).order_by(desc(Message.created_at)).limit(1))
         ).scalar_one_or_none()
         if latest_message is None:
             continue
