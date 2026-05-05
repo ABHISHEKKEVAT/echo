@@ -1,17 +1,16 @@
+import re
 import uuid
 from datetime import UTC, datetime, timedelta
-import re
 
 from backend.core.config import Settings
 from backend.core.security import hash_password
 from backend.domain.auth.entities import TokenPair
-from backend.domain.auth.repositories import ITokenRepository
+from backend.domain.auth.repositories import ITokenRepository, IUserRepository
 from backend.domain.spotify.entities import TrackResponse
 from backend.domain.spotify.exceptions import SpotifyAuthError
 from backend.domain.spotify.repositories import ISpotifyCredentialsRepository
 from backend.infrastructure.persistence.models.user import UserStatus
 from backend.infrastructure.spotify.client import SpotifyClient
-from backend.domain.auth.repositories import IUserRepository
 
 
 class SpotifyUseCases:

@@ -14,11 +14,7 @@ class PasswordPolicyResult {
   final bool hasSpecial;
 
   bool get isValid =>
-      hasMinLength &&
-      hasUppercase &&
-      hasLowercase &&
-      hasNumber &&
-      hasSpecial;
+      hasMinLength && hasUppercase && hasLowercase && hasNumber && hasSpecial;
 
   int get score {
     var value = 0;
@@ -44,6 +40,8 @@ PasswordPolicyResult evaluatePassword(String input) {
     hasUppercase: RegExp(r'[A-Z]').hasMatch(value),
     hasLowercase: RegExp(r'[a-z]').hasMatch(value),
     hasNumber: RegExp(r'\d').hasMatch(value),
-    hasSpecial: RegExp(r'[!@#\$%^&*(),.?":{}|<>_\-+=/\\\[\]~`]').hasMatch(value),
+    hasSpecial: RegExp(
+      r'[!@#\$%^&*(),.?":{}|<>_\-+=/\\\[\]~`]',
+    ).hasMatch(value),
   );
 }

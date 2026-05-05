@@ -46,13 +46,19 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen>
   Color get _bgTop => _isLightMode ? const Color(0xFFF7F9FC) : _bgTopDark;
   Color get _bgBottom => _isLightMode ? const Color(0xFFEFF3FA) : _bgBottomDark;
   Color get _cardBg => _isLightMode ? Colors.white : _cardBgDark;
-  Color get _cardBorder => _isLightMode ? const Color(0xFFDCE4F0) : _cardBorderDark;
+  Color get _cardBorder =>
+      _isLightMode ? const Color(0xFFDCE4F0) : _cardBorderDark;
   Color get _fieldBg => _isLightMode ? const Color(0xFFF5F7FB) : _fieldBgDark;
-  Color get _fieldBorder => _isLightMode ? const Color(0xFFD8E0EC) : _fieldBorderDark;
-  Color get _textPrimary => _isLightMode ? const Color(0xFF111827) : Colors.white;
-  Color get _textMuted => _isLightMode ? const Color(0xFF5B6678) : _textMutedDark;
-  Color get _themeChipBg => _isLightMode ? const Color(0xFFF3F6FC) : const Color(0xAA0D1118);
-  Color get _themeChipBorder => _isLightMode ? const Color(0xFFD7DFEB) : const Color(0xFF2D3A52);
+  Color get _fieldBorder =>
+      _isLightMode ? const Color(0xFFD8E0EC) : _fieldBorderDark;
+  Color get _textPrimary =>
+      _isLightMode ? const Color(0xFF111827) : Colors.white;
+  Color get _textMuted =>
+      _isLightMode ? const Color(0xFF5B6678) : _textMutedDark;
+  Color get _themeChipBg =>
+      _isLightMode ? const Color(0xFFF3F6FC) : const Color(0xAA0D1118);
+  Color get _themeChipBorder =>
+      _isLightMode ? const Color(0xFFD7DFEB) : const Color(0xFF2D3A52);
 
   @override
   void initState() {
@@ -66,12 +72,10 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen>
       parent: _entryController,
       curve: Curves.easeOutCubic,
     );
-    _slideIn = Tween<Offset>(
-      begin: const Offset(0, 0.06),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _entryController, curve: Curves.easeOutCubic),
-    );
+    _slideIn = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(
+          CurvedAnimation(parent: _entryController, curve: Curves.easeOutCubic),
+        );
     _entryController.forward();
   }
 
@@ -148,7 +152,9 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen>
                   height: 220,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: _purpleEnd.withValues(alpha: _isLightMode ? 0.10 : 0.14),
+                    color: _purpleEnd.withValues(
+                      alpha: _isLightMode ? 0.10 : 0.14,
+                    ),
                   ),
                 ),
               ),
@@ -189,7 +195,8 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen>
                               });
                             }
 
-                            final pending = widget.viewModel.pendingVerification;
+                            final pending =
+                                widget.viewModel.pendingVerification;
 
                             return Form(
                               key: _formKey,
@@ -199,231 +206,267 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen>
                                 duration: const Duration(milliseconds: 260),
                                 child: AutofillGroup(
                                   child: Column(
-                                  key: ValueKey(
-                                    '${widget.viewModel.isLoading}-${widget.viewModel.error}-${pending?.debugCode}',
-                                  ),
-                                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Align(
-                                      alignment: Alignment.centerRight,
-                                      child: DecoratedBox(
-                                        decoration: BoxDecoration(
-                                          color: _themeChipBg,
-                                          borderRadius: BorderRadius.circular(999),
-                                          border: Border.all(color: _themeChipBorder),
-                                        ),
-                                        child: IconButton(
-                                          icon: Icon(
-                                            isDarkMode
-                                                ? Icons.light_mode_rounded
-                                                : Icons.dark_mode_rounded,
-                                            color: _textPrimary,
-                                          ),
-                                          tooltip: isDarkMode
-                                              ? 'Switch to light mode'
-                                              : 'Switch to dark mode',
-                                          onPressed: () => themeController.toggle(),
-                                        ),
-                                      ),
+                                    key: ValueKey(
+                                      '${widget.viewModel.isLoading}-${widget.viewModel.error}-${pending?.debugCode}',
                                     ),
-                                    Align(
-                                      child: Container(
-                                        height: 76,
-                                        width: 76,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          gradient: LinearGradient(
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                            colors: [_purpleStart, _purpleEnd],
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.centerRight,
+                                        child: DecoratedBox(
+                                          decoration: BoxDecoration(
+                                            color: _themeChipBg,
+                                            borderRadius: BorderRadius.circular(
+                                              999,
+                                            ),
+                                            border: Border.all(
+                                              color: _themeChipBorder,
+                                            ),
+                                          ),
+                                          child: IconButton(
+                                            icon: Icon(
+                                              isDarkMode
+                                                  ? Icons.light_mode_rounded
+                                                  : Icons.dark_mode_rounded,
+                                              color: _textPrimary,
+                                            ),
+                                            tooltip: isDarkMode
+                                                ? 'Switch to light mode'
+                                                : 'Switch to dark mode',
+                                            onPressed: () =>
+                                                themeController.toggle(),
                                           ),
                                         ),
-                                        child: const Icon(
-                                          Icons.mark_email_unread_outlined,
-                                          color: Colors.white,
-                                          size: 34,
+                                      ),
+                                      Align(
+                                        child: Container(
+                                          height: 76,
+                                          width: 76,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            gradient: LinearGradient(
+                                              begin: Alignment.topLeft,
+                                              end: Alignment.bottomRight,
+                                              colors: [
+                                                _purpleStart,
+                                                _purpleEnd,
+                                              ],
+                                            ),
+                                          ),
+                                          child: const Icon(
+                                            Icons.mark_email_unread_outlined,
+                                            color: Colors.white,
+                                            size: 34,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(height: AppSpacing.md),
-                                    Text(
-                                      'Verify Email',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 42,
-                                        fontWeight: FontWeight.w700,
-                                        color: _textPrimary,
+                                      SizedBox(height: AppSpacing.md),
+                                      Text(
+                                        'Verify Email',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 42,
+                                          fontWeight: FontWeight.w700,
+                                          color: _textPrimary,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: AppSpacing.xs),
-                                    Text(
-                                      'Enter the 6-digit code sent to your inbox',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(color: _textMuted, fontSize: 18),
-                                    ),
-                                    SizedBox(height: AppSpacing.lg),
-                                    Text(
-                                      'Use the same email you registered with',
-                                      style: TextStyle(
-                                        color: _textMuted,
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w600,
+                                      SizedBox(height: AppSpacing.xs),
+                                      Text(
+                                        'Enter the 6-digit code sent to your inbox',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: _textMuted,
+                                          fontSize: 18,
+                                        ),
                                       ),
-                                    ),
-                                    SizedBox(height: AppSpacing.sm),
-                                    if (pending != null) ...[
-                                      Container(
-                                        padding: EdgeInsets.all(AppSpacing.md),
-                                        decoration: BoxDecoration(
-                                          color: _isLightMode
-                                              ? const Color(0xFFF3F7FF)
-                                              : const Color(0xFF101A2A),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(
+                                      SizedBox(height: AppSpacing.lg),
+                                      Text(
+                                        'Use the same email you registered with',
+                                        style: TextStyle(
+                                          color: _textMuted,
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      SizedBox(height: AppSpacing.sm),
+                                      if (pending != null) ...[
+                                        Container(
+                                          padding: EdgeInsets.all(
+                                            AppSpacing.md,
+                                          ),
+                                          decoration: BoxDecoration(
                                             color: _isLightMode
-                                                ? const Color(0xFFD5E1F2)
-                                                : const Color(0xFF22314A),
+                                                ? const Color(0xFFF3F7FF)
+                                                : const Color(0xFF101A2A),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: _isLightMode
+                                                  ? const Color(0xFFD5E1F2)
+                                                  : const Color(0xFF22314A),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            pending.debugCode == null
+                                                ? pending.message
+                                                : '${pending.message} (debug code: ${pending.debugCode})',
+                                            style: TextStyle(
+                                              color: _textPrimary,
+                                            ),
                                           ),
                                         ),
-                                        child: Text(
-                                          pending.debugCode == null
-                                              ? pending.message
-                                              : '${pending.message} (debug code: ${pending.debugCode})',
-                                          style: TextStyle(color: _textPrimary),
-                                        ),
-                                      ),
-                                      SizedBox(height: AppSpacing.md),
-                                    ],
-                                    if (widget.viewModel.error != null) ...[
-                                      Container(
-                                        padding: EdgeInsets.all(AppSpacing.md),
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF34161A),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: const Color(0xFF5B222B),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          widget.viewModel.error!,
-                                          style: const TextStyle(
-                                            color: Color(0xFFFFCDD2),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: AppSpacing.md),
-                                    ],
-                                    _label('Email'),
-                                    TextFormField(
-                                      controller: _emailController,
-                                      keyboardType: TextInputType.emailAddress,
-                                      textInputAction: TextInputAction.next,
-                                      autofillHints: const [AutofillHints.email],
-                                      style: TextStyle(color: _textPrimary),
-                                      decoration: _fieldDecoration(
-                                        hintText: 'you@example.com',
-                                        prefixIcon: Icon(
-                                          Icons.alternate_email_rounded,
-                                          color: _textMuted,
-                                        ),
-                                      ),
-                                      onFieldSubmitted: (_) {
-                                        FocusScope.of(context).nextFocus();
-                                      },
-                                      validator: (value) {
-                                        final email = value?.trim() ?? '';
-                                        if (email.isEmpty) {
-                                          return 'Email is required';
-                                        }
-                                        if (!RegExp(
-                                          r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
-                                        ).hasMatch(email)) {
-                                          return 'Please enter a valid email';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    SizedBox(height: AppSpacing.md),
-                                    _label('Verification Code'),
-                                    TextFormField(
-                                      controller: _codeController,
-                                      keyboardType: TextInputType.number,
-                                      textInputAction: TextInputAction.done,
-                                      autofillHints: const [AutofillHints.oneTimeCode],
-                                      maxLength: 6,
-                                      style: TextStyle(color: _textPrimary),
-                                      decoration: _fieldDecoration(
-                                        hintText: '123456',
-                                        prefixIcon: Icon(
-                                          Icons.pin_outlined,
-                                          color: _textMuted,
-                                        ),
-                                      ),
-                                      onFieldSubmitted: (_) => _verify(),
-                                      validator: (value) {
-                                        final code = value?.trim() ?? '';
-                                        if (!RegExp(r'^\d{6}$').hasMatch(code)) {
-                                          return 'Code must be 6 digits';
-                                        }
-                                        return null;
-                                      },
-                                    ),
-                                    SizedBox(height: AppSpacing.lg),
-                                    SizedBox(
-                                      height: 56,
-                                      child: ElevatedButton(
-                                        onPressed: widget.viewModel.isLoading
-                                            ? null
-                                            : _verify,
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: _purpleStart,
-                                          foregroundColor: Colors.white,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(12),
-                                          ),
-                                          textStyle: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.w700,
-                                          ),
-                                        ),
-                                        child: widget.viewModel.isLoading
-                                            ? const SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  valueColor:
-                                                      AlwaysStoppedAnimation<Color>(
-                                                        Colors.white,
-                                                      ),
-                                                ),
-                                              )
-                                            : const Text('Verify Email'),
-                                      ),
-                                    ),
-                                    SizedBox(height: AppSpacing.xs),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: TextButton(
-                                            onPressed: widget.viewModel.isLoading
-                                                ? null
-                                                : _resend,
-                                            child: const Text('Resend code'),
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: TextButton(
-                                            onPressed: widget.viewModel.isLoading
-                                                ? null
-                                                : () => context.go(Routes.login),
-                                            child: const Text('Back to login'),
-                                          ),
-                                        ),
+                                        SizedBox(height: AppSpacing.md),
                                       ],
-                                    ),
-                                  ],
+                                      if (widget.viewModel.error != null) ...[
+                                        Container(
+                                          padding: EdgeInsets.all(
+                                            AppSpacing.md,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF34161A),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: const Color(0xFF5B222B),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            widget.viewModel.error!,
+                                            style: const TextStyle(
+                                              color: Color(0xFFFFCDD2),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(height: AppSpacing.md),
+                                      ],
+                                      _label('Email'),
+                                      TextFormField(
+                                        controller: _emailController,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
+                                        textInputAction: TextInputAction.next,
+                                        autofillHints: const [
+                                          AutofillHints.email,
+                                        ],
+                                        style: TextStyle(color: _textPrimary),
+                                        decoration: _fieldDecoration(
+                                          hintText: 'you@example.com',
+                                          prefixIcon: Icon(
+                                            Icons.alternate_email_rounded,
+                                            color: _textMuted,
+                                          ),
+                                        ),
+                                        onFieldSubmitted: (_) {
+                                          FocusScope.of(context).nextFocus();
+                                        },
+                                        validator: (value) {
+                                          final email = value?.trim() ?? '';
+                                          if (email.isEmpty) {
+                                            return 'Email is required';
+                                          }
+                                          if (!RegExp(
+                                            r'^[^@\s]+@[^@\s]+\.[^@\s]+$',
+                                          ).hasMatch(email)) {
+                                            return 'Please enter a valid email';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      SizedBox(height: AppSpacing.md),
+                                      _label('Verification Code'),
+                                      TextFormField(
+                                        controller: _codeController,
+                                        keyboardType: TextInputType.number,
+                                        textInputAction: TextInputAction.done,
+                                        autofillHints: const [
+                                          AutofillHints.oneTimeCode,
+                                        ],
+                                        maxLength: 6,
+                                        style: TextStyle(color: _textPrimary),
+                                        decoration: _fieldDecoration(
+                                          hintText: '123456',
+                                          prefixIcon: Icon(
+                                            Icons.pin_outlined,
+                                            color: _textMuted,
+                                          ),
+                                        ),
+                                        onFieldSubmitted: (_) => _verify(),
+                                        validator: (value) {
+                                          final code = value?.trim() ?? '';
+                                          if (!RegExp(
+                                            r'^\d{6}$',
+                                          ).hasMatch(code)) {
+                                            return 'Code must be 6 digits';
+                                          }
+                                          return null;
+                                        },
+                                      ),
+                                      SizedBox(height: AppSpacing.lg),
+                                      SizedBox(
+                                        height: 56,
+                                        child: ElevatedButton(
+                                          onPressed: widget.viewModel.isLoading
+                                              ? null
+                                              : _verify,
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: _purpleStart,
+                                            foregroundColor: Colors.white,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                            ),
+                                            textStyle: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          ),
+                                          child: widget.viewModel.isLoading
+                                              ? const SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child: CircularProgressIndicator(
+                                                    strokeWidth: 2,
+                                                    valueColor:
+                                                        AlwaysStoppedAnimation<
+                                                          Color
+                                                        >(Colors.white),
+                                                  ),
+                                                )
+                                              : const Text('Verify Email'),
+                                        ),
+                                      ),
+                                      SizedBox(height: AppSpacing.xs),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: TextButton(
+                                              onPressed:
+                                                  widget.viewModel.isLoading
+                                                  ? null
+                                                  : _resend,
+                                              child: const Text('Resend code'),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: TextButton(
+                                              onPressed:
+                                                  widget.viewModel.isLoading
+                                                  ? null
+                                                  : () => context.go(
+                                                      Routes.login,
+                                                    ),
+                                              child: const Text(
+                                                'Back to login',
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),

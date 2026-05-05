@@ -281,7 +281,7 @@ async def send_direct_message(
     if userId == current_user.id:
         raise HTTPException(status_code=422, detail="Cannot send message to yourself")
 
-    target_user = await _ensure_target_user_exists(db, userId)
+    await _ensure_target_user_exists(db, userId)
     await _ensure_friendship(db, current_user.id, userId)
 
     text = body.text.strip()

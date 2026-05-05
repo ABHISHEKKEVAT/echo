@@ -174,9 +174,7 @@ GoRouter appRouter(AuthRepository authRepository) => GoRouter(
 );
 
 LoginViewModel _buildLoginViewModel(BuildContext ctx) {
-  return LoginViewModel(
-    authRepository: ctx.read<AuthRepository>(),
-  );
+  return LoginViewModel(authRepository: ctx.read<AuthRepository>());
 }
 
 FriendsViewModel _buildFriendsViewModel(

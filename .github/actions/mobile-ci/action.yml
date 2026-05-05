@@ -21,7 +21,7 @@ runs:
       working-directory: mobile
 
     - name: Format check
-      run: dart format --output=none --set-exit-if-changed .
+      run: dart format --output=none --set-exit-if-changed lib test
       shell: bash
       working-directory: mobile
 

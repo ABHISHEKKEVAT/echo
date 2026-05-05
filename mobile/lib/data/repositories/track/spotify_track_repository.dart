@@ -30,7 +30,9 @@ class SpotifyTrackRepositoryImpl implements TrackRepository {
     final token = await _getAccessToken();
     if (token == null || token.isEmpty) {
       throw DioException(
-        requestOptions: RequestOptions(path: '$_echoBaseUrl/v1/tracks/$trackId'),
+        requestOptions: RequestOptions(
+          path: '$_echoBaseUrl/v1/tracks/$trackId',
+        ),
         message: 'No active session',
       );
     }
