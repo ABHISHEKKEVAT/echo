@@ -3,7 +3,6 @@
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from backend.tests.helpers.auth import issue_access_token
 from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,6 +11,7 @@ from backend.domain.auth.entities import TokenPair
 from backend.domain.spotify.entities import TrackResponse
 from backend.domain.spotify.exceptions import SpotifyApiError, SpotifyAuthError
 from backend.infrastructure.persistence.models.spotify_credentials import SpotifyCredentials
+from backend.tests.helpers.auth import issue_access_token
 
 # ---------------------------------------------------------------------------
 # POST /v1/auth/spotify/token — unauthenticated / validation

@@ -1,6 +1,7 @@
 import pytest
-from backend.tests.helpers.auth import issue_access_token
 from httpx import AsyncClient
+
+from backend.tests.helpers.auth import issue_access_token
 
 
 @pytest.mark.anyio

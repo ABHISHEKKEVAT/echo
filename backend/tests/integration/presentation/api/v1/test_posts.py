@@ -2,7 +2,6 @@ from datetime import UTC, datetime, timedelta
 
 import pytest
 import uuid6
-from backend.tests.helpers.auth import issue_token_pair
 from httpx import AsyncClient
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -12,6 +11,7 @@ from backend.infrastructure.persistence.models.friend import Friend, FriendStatu
 from backend.infrastructure.persistence.models.post import Post, Privacy
 from backend.infrastructure.persistence.models.post_interaction import PostActivityNotification, PostActivityType, PostComment, PostLike
 from backend.infrastructure.persistence.models.user import User, UserStatus
+from backend.tests.helpers.auth import issue_token_pair
 
 
 @pytest.mark.anyio

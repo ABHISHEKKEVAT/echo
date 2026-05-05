@@ -3,8 +3,9 @@
 import uuid
 
 import pytest
-from backend.tests.helpers.auth import issue_access_token
 from httpx import AsyncClient
+
+from backend.tests.helpers.auth import issue_access_token
 
 # ---------------------------------------------------------------------------
 # T015: US1 — GET /v1/users/{userId} contract tests

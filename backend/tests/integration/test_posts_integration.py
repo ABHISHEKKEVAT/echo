@@ -2,7 +2,6 @@
 
 import pytest
 import uuid6
-from backend.tests.helpers.auth import issue_access_token
 from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -10,6 +9,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.infrastructure.persistence.models.attachment import Attachment, AttachmentType
 from backend.infrastructure.persistence.models.post import Post, Privacy
 from backend.infrastructure.persistence.models.user import User
+from backend.tests.helpers.auth import issue_access_token
 
 
 @pytest.mark.anyio

@@ -1,13 +1,13 @@
 """Read-only safety test: POST /v1/search/music must not write to any persistence layer."""
 
 import pytest
-from backend.tests.helpers.auth import issue_access_token
 from fastapi import FastAPI
 from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.domain.music_search.entities import SourceResultItem
 from backend.presentation.api.v1.music_search import get_music_search_use_case
+from backend.tests.helpers.auth import issue_access_token
 
 
 class _ReadOnlyMockProvider:

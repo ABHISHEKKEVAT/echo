@@ -3,7 +3,6 @@
 from unittest.mock import AsyncMock, patch
 
 import pytest
-from backend.tests.helpers.auth import issue_access_token
 from httpx import AsyncClient
 
 from backend.domain.music_search.entities import (
@@ -13,6 +12,7 @@ from backend.domain.music_search.entities import (
     UnifiedResultItem,
 )
 from backend.domain.music_search.exceptions import AllProvidersUnavailableError
+from backend.tests.helpers.auth import issue_access_token
 
 
 def _make_full_response(query: str = "test") -> UnifiedMusicSearchResponse:

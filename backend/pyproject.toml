@@ -50,6 +50,9 @@ line-length = 140
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["backend"]
+
 [tool.isort]
 profile = "black"
 line_length = 140
