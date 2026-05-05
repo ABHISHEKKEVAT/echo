@@ -7,14 +7,10 @@ import 'package:mobile/features/profile_view/presentation/profile_view_model.dar
 import 'package:mobile/features/profile_view/presentation/widgets/profile_posts_list.dart';
 import 'package:mobile/generated/l10n/app_localizations.dart';
 import 'package:mobile/routing/routes.dart';
-import 'package:mobile/ui/core/themes/login_style_controller.dart';
 import 'package:mobile/ui/core/widgets/app_avatar.dart';
 import 'package:mobile/ui/core/widgets/app_bottom_nav_bar.dart';
 import 'package:mobile/ui/core/widgets/app_sidebar_drawer.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
-
-const _kProfileTrendAccent = Color(0xFFFF6B4A);
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key, required this.viewModel, this.userId});
@@ -980,136 +976,6 @@ class _ProfilePalette {
   final Color variantChipTextColor;
   final Color variantChipActiveColor;
   final Color variantChipActiveTextColor;
-
-  static _ProfilePalette forStyle(LoginStyleVariant style) {
-    switch (style) {
-      case LoginStyleVariant.modernLight:
-        return _ProfilePalette(
-          backgroundGradient: const [
-            Color(0xFFF2F3F8),
-            Color(0xFFEFF1F7),
-            Color(0xFFE8ECF6),
-          ],
-          appBarColor: const Color(0xFFF2F3F8),
-          primaryText: const Color(0xFF111827),
-          panelColor: Colors.white.withValues(alpha: 0.92),
-          panelBorderColor: const Color(0xFFDDE4F5),
-          panelShadowColor: const Color(0x1A000000),
-          panelGlowColor: const Color(0x155F46FF),
-          sectionCardColor: const Color(0xFFF6F8FF),
-          sectionCardBorderColor: const Color(0xFFD7DEEE),
-          statChipColor: const Color(0xFF5F46FF),
-          statChipTextColor: Colors.white,
-          listItemCardColor: Colors.white,
-          listItemCardBorderColor: const Color(0xFFE2E8F3),
-          variantChipColor: const Color(0xFFE8ECF5),
-          variantChipBorderColor: const Color(0xFFD7DFEB),
-          variantChipTextColor: const Color(0xFF546072),
-          variantChipActiveColor: const Color(0xFF5F46FF),
-          variantChipActiveTextColor: Colors.white,
-        );
-      case LoginStyleVariant.darkMode:
-        return _ProfilePalette(
-          backgroundGradient: const [
-            Color(0xFF0E1230),
-            Color(0xFF090D24),
-            Color(0xFF131A3C),
-          ],
-          appBarColor: const Color(0xFF0E1230),
-          primaryText: Colors.white,
-          panelColor: const Color(0xE81E232D),
-          panelBorderColor: const Color(0xFF323C52),
-          panelShadowColor: const Color(0x3D000000),
-          panelGlowColor: const Color(0x1F5F46FF),
-          sectionCardColor: const Color(0xFF171D29),
-          sectionCardBorderColor: const Color(0xFF2E3647),
-          statChipColor: const Color(0xFF2D3A52),
-          statChipTextColor: Colors.white,
-          listItemCardColor: const Color(0xFF1D2431),
-          listItemCardBorderColor: const Color(0xFF2B3445),
-          variantChipColor: const Color(0xFF171E3A),
-          variantChipBorderColor: const Color(0xFF2D3A52),
-          variantChipTextColor: const Color(0xFFAFB9CC),
-          variantChipActiveColor: const Color(0xFF5F46FF),
-          variantChipActiveTextColor: Colors.white,
-        );
-      case LoginStyleVariant.gradientVibe:
-        return _ProfilePalette(
-          backgroundGradient: const [
-            Color(0xFF6C4BFF),
-            Color(0xFFF26A70),
-            Color(0xFFFFB05A),
-          ],
-          appBarColor: const Color(0x336C4BFF),
-          primaryText: Colors.white,
-          panelColor: Colors.white.withValues(alpha: 0.14),
-          panelBorderColor: Colors.white.withValues(alpha: 0.26),
-          panelShadowColor: const Color(0x33000000),
-          panelGlowColor: const Color(0x2BFFFFFF),
-          sectionCardColor: Colors.white.withValues(alpha: 0.17),
-          sectionCardBorderColor: Colors.white.withValues(alpha: 0.32),
-          statChipColor: Colors.white.withValues(alpha: 0.20),
-          statChipTextColor: Colors.white,
-          listItemCardColor: Colors.white.withValues(alpha: 0.15),
-          listItemCardBorderColor: Colors.white.withValues(alpha: 0.28),
-          variantChipColor: Colors.white.withValues(alpha: 0.12),
-          variantChipBorderColor: Colors.white.withValues(alpha: 0.24),
-          variantChipTextColor: Colors.white70,
-          variantChipActiveColor: Colors.white,
-          variantChipActiveTextColor: const Color(0xFF6A4CFF),
-        );
-      case LoginStyleVariant.glassmorphism:
-        return _ProfilePalette(
-          backgroundGradient: const [
-            Color(0xFFDCD4F5),
-            Color(0xFFC8BEEB),
-            Color(0xFFB3D5F0),
-          ],
-          appBarColor: const Color(0x40FFFFFF),
-          primaryText: Colors.white,
-          panelColor: Colors.white.withValues(alpha: 0.24),
-          panelBorderColor: Colors.white.withValues(alpha: 0.40),
-          panelShadowColor: const Color(0x26000000),
-          panelGlowColor: const Color(0x196A4BFF),
-          sectionCardColor: Colors.white.withValues(alpha: 0.30),
-          sectionCardBorderColor: Colors.white.withValues(alpha: 0.46),
-          statChipColor: const Color(0xFF6A4BFF),
-          statChipTextColor: Colors.white,
-          listItemCardColor: Colors.white.withValues(alpha: 0.32),
-          listItemCardBorderColor: Colors.white.withValues(alpha: 0.48),
-          variantChipColor: Colors.white.withValues(alpha: 0.24),
-          variantChipBorderColor: Colors.white.withValues(alpha: 0.46),
-          variantChipTextColor: const Color(0xFFEAF0FF),
-          variantChipActiveColor: const Color(0xFF6A4BFF),
-          variantChipActiveTextColor: Colors.white,
-        );
-      case LoginStyleVariant.minimalClean:
-        return _ProfilePalette(
-          backgroundGradient: const [
-            Color(0xFFF8F8FA),
-            Color(0xFFF4F4F7),
-            Color(0xFFF1F2F6),
-          ],
-          appBarColor: const Color(0xFFF8F8FA),
-          primaryText: const Color(0xFF111827),
-          panelColor: Colors.white,
-          panelBorderColor: const Color(0xFFD5D9E2),
-          panelShadowColor: const Color(0x15000000),
-          panelGlowColor: const Color(0x14090909),
-          sectionCardColor: const Color(0xFFF7F8FB),
-          sectionCardBorderColor: const Color(0xFFD7DFEB),
-          statChipColor: const Color(0xFF111111),
-          statChipTextColor: Colors.white,
-          listItemCardColor: Colors.white,
-          listItemCardBorderColor: const Color(0xFFDDE2EB),
-          variantChipColor: const Color(0xFFF0F2F6),
-          variantChipBorderColor: const Color(0xFFD7DFEB),
-          variantChipTextColor: const Color(0xFF6B7280),
-          variantChipActiveColor: const Color(0xFF111111),
-          variantChipActiveTextColor: Colors.white,
-        );
-    }
-  }
 }
 
 class _InstagramStat extends StatelessWidget {
