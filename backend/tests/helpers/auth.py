@@ -5,7 +5,7 @@ async def register_and_verify(
     client: AsyncClient,
     email: str,
     username: str,
-    password: str = "password123",
+    password: str = "Password1!",
 ) -> dict:
     reg_resp = await client.post(
         "/v1/auth/register",
@@ -25,7 +25,7 @@ async def issue_access_token(
     client: AsyncClient,
     email: str,
     username: str,
-    password: str = "password123",
+    password: str = "Password1!",
 ) -> str:
     body = await register_and_verify(client, email, username, password=password)
     return body["access_token"]
@@ -35,7 +35,7 @@ async def issue_token_pair(
     client: AsyncClient,
     email: str,
     username: str,
-    password: str = "password123",
+    password: str = "Password1!",
 ) -> tuple[str, str]:
     body = await register_and_verify(client, email, username, password=password)
     return body["access_token"], body["refresh_token"]

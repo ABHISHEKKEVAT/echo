@@ -8,7 +8,7 @@ from sqlalchemy import event, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.infrastructure.persistence.models.user import User, UserStatus
-from backend.tests.helpers.auth import issue_token_pair
+from tests.helpers.auth import issue_token_pair
 
 # ---------------------------------------------------------------------------
 # T016: US1 — GET /v1/users/{userId} integration tests

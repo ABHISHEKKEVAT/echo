@@ -11,7 +11,7 @@ from backend.infrastructure.persistence.models.friend import Friend, FriendStatu
 from backend.infrastructure.persistence.models.post import Post, Privacy
 from backend.infrastructure.persistence.models.post_interaction import PostActivityNotification, PostActivityType, PostComment, PostLike
 from backend.infrastructure.persistence.models.user import User, UserStatus
-from backend.tests.helpers.auth import issue_token_pair
+from tests.helpers.auth import issue_token_pair
 
 
 @pytest.mark.anyio

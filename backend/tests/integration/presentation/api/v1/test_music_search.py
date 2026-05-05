@@ -10,7 +10,7 @@ from httpx import AsyncClient
 from backend.domain.music_search.entities import SourceResultItem
 from backend.domain.music_search.exceptions import ProviderRateLimitError, ProviderUnavailableError
 from backend.presentation.api.v1.music_search import get_music_search_use_case
-from backend.tests.helpers.auth import issue_access_token
+from tests.helpers.auth import issue_access_token
 
 
 def _sp_track(track_id: str, name: str, creator: str, duration_ms: int = 180000) -> SourceResultItem:

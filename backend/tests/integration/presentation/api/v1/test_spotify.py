@@ -11,7 +11,7 @@ from backend.domain.auth.entities import TokenPair
 from backend.domain.spotify.entities import TrackResponse
 from backend.domain.spotify.exceptions import SpotifyApiError, SpotifyAuthError
 from backend.infrastructure.persistence.models.spotify_credentials import SpotifyCredentials
-from backend.tests.helpers.auth import issue_access_token
+from tests.helpers.auth import issue_access_token
 
 # ---------------------------------------------------------------------------
 # POST /v1/auth/spotify/token — unauthenticated / validation

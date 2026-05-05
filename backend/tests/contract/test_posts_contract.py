@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from backend.infrastructure.persistence.models.attachment import Attachment, AttachmentType, AttachmentUrlProvider
 from backend.infrastructure.persistence.models.post import Post, Privacy
 from backend.infrastructure.persistence.models.user import User
-from backend.tests.helpers.auth import issue_access_token
+from tests.helpers.auth import issue_access_token
 
 
 @pytest.mark.anyio
